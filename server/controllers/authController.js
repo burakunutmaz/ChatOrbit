@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt');
 const pool = require('../db');
 
 exports.getLogin = (req,res,next) => {
-    console.log("ran heavy task");
     if (req.session.user && req.session.user.username){
         res.json({loggedIn: true, username: req.session.user.username})
     } else {

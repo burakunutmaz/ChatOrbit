@@ -7,50 +7,29 @@ const RedisStore = require('connect-redis')(session);
 require('dotenv').config();
 
 const authRouter = require('./routes/authRouter');
+const {sessionMiddleware, wrap, corsConfig} = require('./controllers/serverController');
+const { authorizeUser } = require('./controllers/socketController');
 
 const app = express();
 
 const server = require('http').createServer(app);
 
 const io = new Server(server, {
-    cors:{
-        origin: "http://localhost:3000",
-        credentials: "true"
-    }
+    cors: corsConfig
 });
 
-const redisClient = require('./redis');
-
 app.use(helmet());
-app.use(cors({
-    origin: "http://localhost:3000",
-    credentials: true
-}))
+app.use(cors(corsConfig))
 app.use(express.json());
 
-app.use(session({
-    secret: process.env.COOKIE_SECRET,
-    name: "sid",
-    resave: false,
-    saveUninitialized: false,
-    store: new RedisStore({client: redisClient}),
-    cookie: {
-        secure: process.env.ENVIRONMENT === "production" ? "true" : "auto",
-        httpOnly: true,
-        sameSite: process.env.ENVIRONMENT === "production" ? "none" : "lax",
-        expires: 1000 * 60 * 60 * 24 * 7
-    }
-}));
+app.use(sessionMiddleware);
 
 app.use("/auth", authRouter);
 
-app.get("/", (req,res,next) => {
-    res.json({message: "hi"});
-    next();
-})
-
+io.use(wrap(sessionMiddleware));
+io.use(authorizeUser);
 io.on("connect", socket => {
-
+    console.log(socket.request.session.user.username);
 });
 
 server.listen(4000, () => {
