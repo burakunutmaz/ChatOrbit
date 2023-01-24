@@ -1,14 +1,17 @@
-import { VStack, ButtonGroup, Button, Heading } from '@chakra-ui/react'
+import { VStack, ButtonGroup, Button, Heading, Text } from '@chakra-ui/react'
 import React from 'react'
 import {Form, Formik} from 'formik'
 import * as Yup from "yup";
 import TextField from './TextField';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeftIcon } from '@chakra-ui/icons';
+import { useContext,useState } from 'react';
+import { AccountContext } from '../AccountContext';
 
 const SignUp = () => {
-
+    const {setUser} = useContext(AccountContext);
     const navigate = useNavigate();
+    const [error, setError] = useState(null);
 
   return (
     <Formik 
@@ -25,7 +28,7 @@ const SignUp = () => {
         })}
         onSubmit= {(values, actions) => {
             const vals = {...values}
-            fetch("http://localhost:4000/auth/register", {
+            fetch("http://localhost:4000/auth/signup", {
                 method: "POST",
                 credentials: "include",
                 headers: {
@@ -42,6 +45,14 @@ const SignUp = () => {
                 .then(data => {
                     if (!data) return;
                     console.log(data);
+                    setUser({...data});
+                    if (data.status){
+                        setError(data.status);
+                    } else if (data.loggedIn){
+
+                        navigate("/home");
+                    }
+
                 })
                 .catch(err => console.log(err))
             actions.resetForm();
@@ -53,7 +64,7 @@ const SignUp = () => {
                 <Heading>
                     Create an Account
                 </Heading>
-
+                <Text as="p" color="red.500">{error}</Text>
                 <TextField label="Username" name="username" placeholder="Enter username" autoComplete="off" />
                 <TextField type="password" label="Password" name="password" placeholder="Enter password" autoComplete="off" />
                     
