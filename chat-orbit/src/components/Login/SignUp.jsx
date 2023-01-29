@@ -46,13 +46,11 @@ const SignUp = () => {
                     if (!data) return;
                     console.log(data);
                     setUser({...data});
-                    if (data.status){
+                    if (!data.status){
                         setError(data.status);
                     } else if (data.loggedIn){
-
                         navigate("/home");
                     }
-
                 })
                 .catch(err => console.log(err))
             actions.resetForm();

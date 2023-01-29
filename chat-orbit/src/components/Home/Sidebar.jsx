@@ -6,7 +6,7 @@ import AddFriendModal from './AddFriendModal'
 import { FriendContext } from './Home'
 
 const Sidebar = () => {
-    const {friendsList, setFriendsList} = useContext(FriendContext);
+    const {friendsList} = useContext(FriendContext);
     const {isOpen, onOpen, onClose} = useDisclosure();
 
     return (
@@ -21,9 +21,9 @@ const Sidebar = () => {
         <Divider/>
         <VStack as={TabList}>
             {friendsList.map(friend => (
-                <HStack key={friend.username} as={Tab}>
+                <HStack key={`friend:${friend.username}`} as={Tab}>
                     <Text>{friend.username}</Text>
-                    <Circle background={friend.onlineStatus ? "green.500" : "gray.500"}
+                    <Circle background={friend.connected ? "green.500" : "gray.500"}
                             w="10px" h="10px"/>
                 </HStack>
             ))}

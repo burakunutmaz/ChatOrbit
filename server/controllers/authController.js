@@ -1,7 +1,9 @@
 const bcrypt = require('bcrypt');
 const pool = require('../db');
+const {v4: uuidv4} = require('uuid');
 
 exports.getLogin = (req,res,next) => {
+
     if (req.session.user && req.session.user.username){
         res.json({loggedIn: true, username: req.session.user.username})
     } else {
@@ -11,7 +13,7 @@ exports.getLogin = (req,res,next) => {
 
 exports.postLogin = async (req,res,next) => {   
 
-    const potentialLogin = await pool.query('SELECT username, passhash FROM users u WHERE u.username = $1',
+    const potentialLogin = await pool.query('SELECT username, passhash, userid FROM users u WHERE u.username = $1',
         [req.body.username]);
 
     if (potentialLogin.rowCount > 0){
@@ -21,7 +23,8 @@ exports.postLogin = async (req,res,next) => {
             //login
             req.session.user = {
                 username: req.body.username,
-                id: potentialLogin.rows[0].id
+                id: potentialLogin.rows[0].id,
+                userid: potentialLogin.rows[0].userid
             }
             res.json({loggedIn: true, username: req.body.username, status: "Successfully logged in."});
 
@@ -41,13 +44,14 @@ exports.postSignup = async (req,res,next) => {
     if (existingUser.rowCount === 0){
         //register
         const hashedPass = await bcrypt.hash(req.body.password, 10);
-        const newUserQuery = await pool.query('INSERT INTO users(username, passhash) values($1, $2) RETURNING id, username',
-            [req.body.username, hashedPass]);
+        const newUserQuery = await pool.query('INSERT INTO users(username, passhash, userid) values($1, $2, $3) RETURNING id, username, userId',
+            [req.body.username, hashedPass, uuidv4()]);
         
         
         req.session.user = {
             username: req.body.username,
-            id: newUserQuery.rows[0].id
+            id: newUserQuery.rows[0].id,
+            userid: newUserQuery.rows[0].userid
         }
         res.json({loggedIn: true, username: req.body.username, status:"Successfully created an account."});
 

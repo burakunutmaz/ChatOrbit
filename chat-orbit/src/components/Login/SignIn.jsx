@@ -44,7 +44,7 @@ const SignIn = () => {
                     if (!data) return;
                     console.log(data);
                     setUser({...data});
-                    if (data.status){
+                    if (!data.status){
                         setError(data.status);
                     } else if (data.loggedIn){
 
