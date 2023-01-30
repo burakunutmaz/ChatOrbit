@@ -28,7 +28,7 @@ const SignUp = () => {
         })}
         onSubmit= {(values, actions) => {
             const vals = {...values}
-            fetch("http://localhost:4000/auth/signup", {
+            fetch(process.env.REACT_APP_SERVER_URL+"/auth/signup", {
                 method: "POST",
                 credentials: "include",
                 headers: {

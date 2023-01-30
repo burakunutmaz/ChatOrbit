@@ -22,7 +22,7 @@ const sessionMiddleware = session({
 const wrap = expressMiddleware => (socket, next) => expressMiddleware(socket.request, {},  next);
 
 const corsConfig = {
-    origin: "http://localhost:3000",
+    origin: process.env.CLIENT_URL,
     credentials: true
 }
 
