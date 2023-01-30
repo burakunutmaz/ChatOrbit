@@ -10,7 +10,7 @@ const UserContext = ({children}) => {
     useEffect(() => {
         fetch(process.env.REACT_APP_SERVER_URL+"/auth/login", {
             credentials: "include"
-        })
+        }, [])
         .catch(err => {
             setUser({loggedIn: false});
             return;
@@ -31,7 +31,7 @@ const UserContext = ({children}) => {
                 navigate("/home");
             }
         });
-    }, []);
+    }, [navigate]);
     return <AccountContext.Provider value={{user, setUser}}>
         {children}
     </AccountContext.Provider>

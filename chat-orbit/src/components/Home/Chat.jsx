@@ -6,7 +6,7 @@ import ChatBox from './ChatBox'
 import { FriendContext, MessagesContext } from './Home'
 
 const Chat = ({userid}) => {
-    const {friendsList, setFriendsList} = useContext(FriendContext);
+    const {friendsList} = useContext(FriendContext);
     const { messages } = useContext(MessagesContext);
     const bottomDiv = useRef(null);
 
