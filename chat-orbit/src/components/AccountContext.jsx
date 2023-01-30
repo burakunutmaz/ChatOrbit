@@ -8,7 +8,7 @@ const UserContext = ({children}) => {
     const navigate = useNavigate();
     const [user, setUser] = useState({loggedIn: null});
     useEffect(() => {
-        fetch("http://localhost:4000/auth/login", {
+        fetch(process.env.REACT_APP_SERVER_URL+"/auth/login", {
             credentials: "include"
         })
         .catch(err => {
