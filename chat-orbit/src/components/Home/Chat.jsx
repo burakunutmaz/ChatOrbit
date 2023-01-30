@@ -12,7 +12,7 @@ const Chat = ({userid}) => {
 
     useEffect(() => {
         bottomDiv.current?.scrollIntoView();
-    })
+    }, [])
 
     if (friendsList.length > 0) {return (
     <VStack h={"100%"} justify="end">
