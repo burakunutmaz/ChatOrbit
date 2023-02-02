@@ -34,24 +34,24 @@ const SignIn = () => {
                 },
                 body: JSON.stringify(vals)
             })
-                .then(res => {
-                    if (!res || !res.ok || res.status >= 400){
-                        return;
-                    }
-                    return res.json();
-                })
-                .then(data => {
-                    if (!data) return;
-                    console.log(data);
-                    setUser({...data});
-                    if (!data.status){
-                        setError(data.status);
-                    } else if (data.loggedIn){
+            .then(res => {
+                if (!res || !res.ok || res.status >= 400){
+                    return;
+                }
+                return res.json();
+            })
+            .then(data => {
+                if (!data) return;
+                console.log(data);
+                setUser({...data});
+                if (!data.status){
+                    setError(data.status);
+                } else if (data.loggedIn){
 
-                        navigate("/home");
-                    }
-                })
-                .catch(err => console.log(err))
+                    navigate("/home");
+                }
+            })
+            .catch(err => console.log(err))
             actions.resetForm();
         }}>
 
