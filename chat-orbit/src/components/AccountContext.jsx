@@ -31,7 +31,7 @@ const UserContext = ({children}) => {
                 navigate("/home");
             }
         });
-    }, [navigate]);
+    }, []);
     return <AccountContext.Provider value={{user, setUser}}>
         {children}
     </AccountContext.Provider>

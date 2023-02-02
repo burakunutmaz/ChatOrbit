@@ -17,8 +17,6 @@ export const Views = () => {
         <Route element={<PrivateRoutes/>}>
           <Route path="/home" element={<Home/>} />
         </Route>
-        
-        <Route path="*" element={<SignIn/>} />
     </Routes>
   )
 }

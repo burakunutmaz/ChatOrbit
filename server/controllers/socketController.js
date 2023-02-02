@@ -38,7 +38,8 @@ exports.initializeUser = async socket => {
     const messagesString = await redisClient.lrange(`chat:${socket.user.userid}`, 0,-1);
     // to.from.content
     const messages = messagesString.map(string => {
-        const parsedString = messagesString.split(".");
+        console.log(string);
+        const parsedString = string.split(".");
         return {to: parsedString[0], from: parsedString[1], content: parsedString[2]};
     })
 
